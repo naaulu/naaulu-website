@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NAAULU — The Open Rainfall Initiative</title>
+  <style>
+    /* Reset & Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f8fafc;
+      color: #1e293b;
+      line-height: 1.6;
+    }
+    
+    a {
+      color: #10b981;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    
+    a:hover {
+      color: #059669;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Header & Navigation */
+    header {
+      background-color: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid #e2e8f0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 4rem;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      color: #0f172a;
+    }
+    
+    .logo svg {
+      width: 1.75rem;
+      height: 1.75rem;
+      fill: #10b981;
+    }
+    
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+    
+    nav a {
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: #475569;
+    }
+    
+    nav a:hover {
+      color: #10b981;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: radial-gradient(circle at top right, #f0fdf4 0%, #f8fafc 100%);
+      padding: 6rem 0 5rem 0;
+      border-bottom: 1px solid #e2e8f0;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      align-items: center;
+      gap: 4rem;
+    }
+    
+    .hero-content h1 {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 800;
+      line-height: 1.1;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+    }
+    
+    .hero-content h1 span {
+      background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .hero-subtitle {
+      font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+      color: #475569;
+      margin: 1.5rem 0 2.5rem 0;
+      font-weight: 400;
+      max-width: 600px;
+    }
+    
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem 1.75rem;
+      font-weight: 600;
+      border-radius: 0.5rem;
+      transition: all 0.2s ease;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+    
+    .btn-primary {
+      background-color: #10b981;
+      color: white;
+      border: none;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+    }
+    
+    .btn-primary:hover {
+      background-color: #059669;
+      color: white;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(16, 185, 129, 0.25);
+    }
+    
+    .btn-secondary {
+      background-color: white;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+    }
+    
+    .btn-secondary:hover {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      border-color: #94a3b8;
+    }
+
+    /* Radar Illustration Graphic */
+    .hero-graphic {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .radar-container {
+      width: 280px;
+      height: 280px;
+      position: relative;
+      background-color: #ffffff;
+      border-radius: 50%;
+      border: 2px solid #e2e8f0;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    
+    .radar-circle {
+      position: absolute;
+      border: 1px dashed rgba(16, 185, 129, 0.2);
+      border-radius: 50%;
+    }
+    
+    .radar-circle-1 { width: 70px; height: 70px; }
+    .radar-circle-2 { width: 140px; height: 140px; }
+    .radar-circle-3 { width: 210px; height: 210px; }
+    
+    .radar-crosshair-h {
+      position: absolute;
+      width: 90%;
+      height: 1px;
+      background-color: rgba(16, 185, 129, 0.1);
+    }
+    
+    .radar-crosshair-v {
+      position: absolute;
+      height: 90%;
+      width: 1px;
+      background-color: rgba(16, 185, 129, 0.1);
+    }
+    
+    .radar-sweep {
+      position: absolute;
+      width: 50%;
+      height: 50%;
+      background: linear-gradient(45deg, rgba(16, 185, 129, 0.15) 0%, transparent 100%);
+      top: 0;
+      left: 50%;
+      transform-origin: bottom left;
+      animation: rotate 6s linear infinite;
+      border-left: 1px solid rgba(16, 185, 129, 0.4);
+    }
+    
+    .radar-blip {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background-color: #10b981;
+      border-radius: 50%;
+      filter: blur(1px);
+      animation: pulse-blip 3s infinite ease-in-out;
+    }
+    
+    .blip-1 { top: 30%; left: 40%; animation-delay: 0s; }
+    .blip-2 { top: 65%; left: 70%; animation-delay: 1.5s; }
+    .blip-3 { top: 45%; left: 20%; animation-delay: 0.8s; }
+    
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    @keyframes pulse-blip {
+      0%, 100% { opacity: 0.2; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.3); box-shadow: 0 0 10px rgba(16, 185, 129, 0.6); }
+    }
+
+    /* Features Section */
+    .features {
+      padding: 6rem 0;
+      background-color: white;
+    }
+    
+    .section-title {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 0.5rem;
+    }
+    
+    .section-subtitle {
+      text-align: center;
+      color: #64748b;
+      font-size: 1.1rem;
+      margin-bottom: 4rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2rem;
+    }
+    
+    .feature-card {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 2.25rem 2rem;
+      border-radius: 0.75rem;
+      transition: all 0.2s ease;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.04);
+      border-color: #cbd5e1;
+    }
+    
+    .feature-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 3.25rem;
+      height: 3.25rem;
+      background-color: #ecfeff;
+      border-radius: 0.5rem;
+      color: #06b6d4;
+      margin-bottom: 1.5rem;
+    }
+    
+    .feature-icon.green {
+      background-color: #f0fdf4;
+      color: #10b981;
+    }
+    
+    .feature-icon svg {
+      width: 1.75rem;
+      height: 1.75rem;
+    }
+    
+    .feature-card h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 0.75rem;
+    }
+    
+    .feature-card p {
+      color: #475569;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* Installation Section */
+    .install {
+      padding: 6rem 0;
+      background-color: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    
+    .install-box {
+      background-color: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      max-width: 800px;
+      margin: 0 auto;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    
+    .tab-content {
+      display: none;
+      padding: 2rem;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+
+    .install-instruction {
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+      color: #334155;
+    }
+    
+    /* Code Blocks */
+    .code-container {
+      position: relative;
+      background-color: #0f172a;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      margin-top: 0.5rem;
+    }
+    
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 1rem;
+      background-color: #1e293b;
+      color: #94a3b8;
+      font-family: monospace;
+      font-size: 0.75rem;
+      border-bottom: 1px solid #334155;
+    }
+    
+    .copy-btn {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      transition: background 0.2s;
+    }
+    
+    .copy-btn:hover {
+      background-color: #334155;
+      color: #ffffff;
+    }
+    
+    pre {
+      margin: 0;
+      padding: 1.25rem 1rem;
+      overflow-x: auto;
+    }
+    
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.9rem;
+      color: #e2e8f0;
+    }
+    
+    .comment { color: #64748b; }
+    .keyword { color: #f43f5e; }
+    .command-name { color: #38bdf8; }
+    .args { color: #10b981; }
+
+    /* Quickstart Section */
+    .quickstart {
+      padding: 6rem 0;
+      background-color: white;
+    }
+    
+    .quickstart-box {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .step-list {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+    
+    .step-item {
+      display: flex;
+      gap: 1.5rem;
+    }
+    
+    .step-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 2.5rem;
+      height: 2.5rem;
+      background-color: #f0fdf4;
+      border: 2px solid #10b981;
+      color: #10b981;
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+    
+    .quickstart code {
+      color: #6366f1;
+    }
+    
+    .step-body {
+      flex-grow: 1;
+    }
+    
+    .step-body h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 0.5rem;
+    }
+    
+    .step-body p {
+      color: #475569;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #0f172a;
+      color: #94a3b8;
+      padding: 4rem 0;
+      border-top: 1px solid #1e293b;
+      font-size: 0.9rem;
+    }
+    
+    .footer-grid {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+    
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: white;
+    }
+    
+    .footer-logo svg {
+      fill: #10b981;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+    
+    .footer-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+    }
+    
+    .footer-links a {
+      color: #94a3b8;
+    }
+    
+    .footer-links a:hover {
+      color: white;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 3rem;
+      }
+      
+      .hero-subtitle {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      
+      .hero-actions {
+        justify-content: center;
+      }
+      
+      .nav-container {
+        flex-direction: column;
+        height: auto;
+        padding: 1rem 0;
+        gap: 1rem;
+      }
+      
+      nav ul {
+        gap: 1.25rem;
+      }
+      
+      .footer-grid {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .footer-links {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="container nav-container">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM6.162 5.102a.75.75 0 011.06 0l1.59 1.59a.75.75 0 11-1.06 1.06l-1.59-1.59a.75.75 0 010-1.06zm11.676 0a.75.75 0 010 1.06l-1.59 1.59a.75.75 0 11-1.06-1.06l1.59-1.59a.75.75 0 011.06 0zM12 6.75a5.25 5.25 0 100 10.5 5.25 5.25 0 000-10.5zM3.75 12a.75.75 0 01.75-.75h2.25a.75.75 0 010 1.5H4.5a.75.75 0 01-.75-.75zm13.5 0a.75.75 0 01.75-.75h2.25a.75.75 0 010 1.5H18a.75.75 0 01-.75-.75zm-11.088 5.1a.75.75 0 011.06 0l1.59 1.59a.75.75 0 11-1.06 1.06l-1.59-1.59a.75.75 0 010-1.06zm9.563 0a.75.75 0 010 1.06l-1.59 1.59a.75.75 0 11-1.06-1.06l1.59-1.59a.75.75 0 011.06 0zM12 17.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V18a.75.75 0 01.75-.75z" />
+        </svg>
+        <span>NAAULU</span>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#hero">Home</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#install">Install</a></li>
+          <li><a href="#quickstart">Quickstart</a></li>
+          <li><a href="https://naaulu.org/live/" target="_blank">Live</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero" id="hero">
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <h1>The Open <span>Rainfall</span> Initiative</h1>
+        <p class="hero-subtitle">
+          Naaulu <em>(nah-ow-loo)</em> is a powerful toolbox to estimate, combine, verify and visualize high-resolution precipitation datasets.
+        </p>
+
+      </div>
+      <div class="hero-graphic">
+        <div class="radar-container">
+          <div class="radar-circle radar-circle-1"></div>
+          <div class="radar-circle radar-circle-2"></div>
+          <div class="radar-circle radar-circle-3"></div>
+          <div class="radar-crosshair-h"></div>
+          <div class="radar-crosshair-v"></div>
+          <div class="radar-sweep"></div>
+          <div class="radar-blip blip-1"></div>
+          <div class="radar-blip blip-2"></div>
+          <div class="radar-blip blip-3"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features" id="features">
+    <div class="container">
+      <h2 class="section-title">Features</h2>
+
+      
+      <div class="features-grid">
+        <!-- Feature 1 -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1.5M12 18.75V21M3.75 12h1.5m13.5 0h1.5M5.25 5.25l1.06 1.06m8.44 8.44l1.06 1.06M5.25 18.75l1.06-1.06m8.44-8.44l1.06-1.06M12 7.5a4.5 4.5 0 100 9 4.5 4.5 0 000-9z" />
+            </svg>
+          </div>
+          <h3>Rainfall Estimation</h3>
+          <p>
+	  Process raw weather radar reflectivity measurements using a basic (<b>Dove</b>) or advanced (<b>Eider</b>) method.
+          </p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="feature-card">
+          <div class="feature-icon green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+          </div>
+          <h3>Dataset Combination</h3>
+          <p>
+            Seamlessly combine high resolution datasets into coarser spatial and temporal resolution.
+          </p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3>Gauge Verification</h3>
+          <p>
+            Validate estimation accuracy against local or global rain gauge networks using various error metrics.
+          </p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="feature-card">
+          <div class="feature-icon green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15a4.5 4.5 0 004.5 4.5H18a3.75 3.75 0 001.332-7.257 3 3 0 00-3.758-3.848 5.25 5.25 0 00-10.233 2.33A4.502 4.502 0 002.25 15z" />
+            </svg>
+          </div>
+          <h3>Plots & Animations</h3>
+          <p>
+            Generate precise 2D spatial figures, sequential temporal video animations, and complete 3D renders of rainfall evolution with built-in mapping tools.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Installation Section -->
+  <section class="install" id="install">
+    <div class="container">
+      <h2 class="section-title">Installation</h2>
+      
+      <div class="install-box">
+        <div class="tab-content active">
+          <p class="install-instruction">Run the install script:</p>
+          <div class="code-container">
+            <div class="code-header">
+              <span>Bash</span>
+              <button class="copy-btn" onclick="copyCode('linux-code', this)">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                Copy
+              </button>
+            </div>
+            <pre><code id="linux-code">curl -sSL https://naaulu.org/install.sh | bash
+</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quickstart Section -->
+  <section class="quickstart" id="quickstart">
+    <div class="container quickstart-box">
+      <h2 class="section-title">Quickstart</h2>
+      
+      <div class="step-list">
+        <!-- Step 1 -->
+        <div class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h3>Estimate Rainfall</h3>
+            <p>Compute rainfall estimations from radar data at base resolution (5min, 1km). Define the country code (e.g., <code>est</code>), and product method (i.e., <code>dove</code> or <code>eider</code>).</p>
+            <div class="code-container">
+              <div class="code-header">
+                <span>CLI</span>
+                <button class="copy-btn" onclick="copyCode('step1-code', this)">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  Copy
+                </button>
+              </div>
+              <pre><code id="step1-code"><span class="command-name">naaulu</span> estimate \
+  <span class="args">--first</span> 20250711T180500 \
+  <span class="args">--last</span> 20250711T190000 \
+  <span class="args">--country</span> est \
+  <span class="args">--product</span> dove \
+              </code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h3>Combine Into Final Products</h3>
+            <p>Combine the computed partial estimates over a specific duration and resolution:</p>
+            <div class="code-container">
+              <div class="code-header">
+                <span>CLI</span>
+                <button class="copy-btn" onclick="copyCode('step2-code', this)">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  Copy
+                </button>
+              </div>
+              <pre><code id="step2-code"><span class="command-name">naaulu</span> combine \
+  <span class="args">--first</span> 20250711T190000 \
+  <span class="args">--country</span> est \
+  <span class="args">--duration</span> pt1h \
+  <span class="args">--resolution</span> 2km \
+  <span class="args">--product</span> dove \
+	      </code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h3>Generate Plots & Visualization</h3>
+            <p>Render a high-quality spatial plot of the combined rainfall accumulation:</p>
+            <div class="code-container">
+              <div class="code-header">
+                <span>CLI</span>
+                <button class="copy-btn" onclick="copyCode('step3-code', this)">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  Copy
+                </button>
+              </div>
+              <pre><code id="step3-code"><span class="command-name">naaulu</span> plot \
+  <span class="args">--first</span> 20250711T190000 \
+  <span class="args">--country</span> est \
+  <span class="args">--duration</span> pt1h \
+  <span class="args">--resolution</span> 2km \
+  <span class="args">--product</span> dove \
+  <span class="args">--network</span> est \
+  <span class="args">--show</span> \
+	      </code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 3rem; text-align: center;">
+        <img src="dove.png" alt="Rainfall plot example" style="max-width: 640px; width: 100%; border-radius: 0.5rem; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+      </div>
+
+      <div class="step-list" style="margin-top: 4rem;">
+        <!-- Step 4 -->
+        <div class="step-item">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h3>Verify Against Gauges</h3>
+            <p>Validate the rainfall estimates against rain gauge observations and display the scatter plot with error metrics:</p>
+            <div class="code-container">
+              <div class="code-header">
+                <span>CLI</span>
+                <button class="copy-btn" onclick="copyCode('step4-code', this)">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  Copy
+                </button>
+              </div>
+              <pre><code id="step4-code"><span class="command-name">naaulu</span> verify \
+  <span class="args">--first</span> 20250711T190000 \
+  <span class="args">--country</span> est \
+  <span class="args">--duration</span> pt1h \
+  <span class="args">--resolution</span> 2km \
+  <span class="args">--product</span> dove \
+  <span class="args">--network</span> est \
+  <span class="args">--show</span> \
+	      </code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 3rem; text-align: center;">
+        <img src="dove_beaver.png" alt="Verification scatter plot" style="max-width: 100%; border-radius: 0.5rem; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-grid">
+      <div class="footer-meta">
+        <div class="footer-logo">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM6.162 5.102a.75.75 0 011.06 0l1.59 1.59a.75.75 0 11-1.06 1.06l-1.59-1.59a.75.75 0 010-1.06zm11.676 0a.75.75 0 010 1.06l-1.59 1.59a.75.75 0 11-1.06-1.06l1.59-1.59a.75.75 0 011.06 0zM12 6.75a5.25 5.25 0 100 10.5 5.25 5.25 0 000-10.5zM3.75 12a.75.75 0 01.75-.75h2.25a.75.75 0 010 1.5H4.5a.75.75 0 01-.75-.75zm13.5 0a.75.75 0 01.75-.75h2.25a.75.75 0 010 1.5H18a.75.75 0 01-.75-.75zm-11.088 5.1a.75.75 0 011.06 0l1.59 1.59a.75.75 0 11-1.06 1.06l-1.59-1.59a.75.75 0 010-1.06zm9.563 0a.75.75 0 010 1.06l-1.59 1.59a.75.75 0 11-1.06-1.06l1.59-1.59a.75.75 0 011.06 0zM12 17.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V18a.75.75 0 01.75-.75z" />
+          </svg>
+          <span>NAAULU</span>
+        </div>
+        <p style="margin-top: 0.5rem; color: #64748b;">The open rainfall initiative &copy; 2026.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/naaulu/naaulu" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <span style="color: #334155;">|</span>
+        <span>License: <a href="https://github.com/naaulu/naaulu/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" style="color: #10b981;">AGPL-3.0</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Code copying functionality
+    function copyCode(elementId, btnElement) {
+      const codeElement = document.getElementById(elementId);
+      const textToCopy = codeElement.innerText;
+      
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        const originalHTML = btnElement.innerHTML;
+        btnElement.innerHTML = `
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #10b981;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span style="color: #10b981;">Copied!</span>
+        `;
+        setTimeout(() => {
+          btnElement.innerHTML = originalHTML;
+        }, 2000);
+      }).catch(err => {
+        console.error('Failed to copy text: ', err);
+      });
+    }
+  </script>
+</body>
+</html>

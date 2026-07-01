@@ -1,0 +1,17 @@
+when:
+  event: push
+  branch: main
+
+steps:
+  - name: deploy
+    image: ubuntu:latest
+    environment:
+      WEB_HOST:
+        from_secret: WEB_HOST
+      WEB_USER:
+        from_secret: WEB_USER
+      WEB_PASS:
+        from_secret: WEB_PASS
+    commands:
+      - apt-get update && apt-get install -y openssh-client sshpass
+      - bash deploy.sh
