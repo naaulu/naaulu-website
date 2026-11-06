@@ -1,0 +1,44 @@
+when:
+  event: push
+  branch: main
+
+steps:
+  - name: deploy
+    image: ubuntu:latest
+    environment:
+      WEB_HOST:
+        from_secret: WEB_HOST
+      WEB_USER:
+        from_secret: WEB_USER
+      WEB_PASS:
+        from_secret: WEB_PASS
+      DEPLOY_HOST:
+        from_secret: DEPLOY_HOST
+      DEPLOY_PORT:
+        from_secret: DEPLOY_PORT
+      DEPLOY_USER:
+        from_secret: DEPLOY_USER
+      DEPLOY_KEY:
+        from_secret: DEPLOY_KEY
+    commands:
+      - apt-get update && apt-get install -y rsync openssh-client sshpass
+      # DEPLOY_KEY holds the private key base64-encoded: a single-line value
+      # that survives any UI. Decode it, then refuse an empty result — a
+      # missing or raw-PEM secret must fail loudly, not deploy garbage.
+      - umask 077 && printf '%s' "$DEPLOY_KEY" | base64 -d > "$CI_WORKSPACE/deploy_key" && test -s "$CI_WORKSPACE/deploy_key"
+      - DEPLOY_KEY="$CI_WORKSPACE/deploy_key" bash deploy.sh
+      - rm -f "$CI_WORKSPACE/deploy_key"
+
+  - name: mirror
+    image: ubuntu:latest
+    when:
+      branch: main
+    environment:
+      GITHUB_TOKEN:
+        from_secret: GITHUB_TOKEN
+    commands:
+      - apt-get update && apt-get install -y git
+      # Push by URL instead of adding a remote: a reused workspace already
+      # has 'github', and `git remote add` fails the whole pipeline on the
+      # second build. The token stays in the push URL, never in the config.
+      - git push "https://$GITHUB_TOKEN@github.com/naaulu/naaulu-website.git" main -f
